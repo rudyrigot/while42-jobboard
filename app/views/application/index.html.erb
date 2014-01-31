@@ -1,20 +1,21 @@
 <article class="container" id="joboffers">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <h1>The Job offers</h1>
-      <p>
+      <p class="newbutton">
         <%= link_to "Create a new one", newoffer_path, :class => "btn btn-default btn-sm" %>
       </p>
+      <h1>The Job offers</h1>
       <% @offers.each do |offer| %>
         <% area = offer['joboffer.area'] ? @areas_by_id[offer['joboffer.area'].id][0] : nil %>
         <div class="joboffer">
-          <h2>
+          <h3>
             <%= link_to offer.first_title, link_resolver(@maybe_ref).link_to(offer) %>
-          </h2>
+          </h3>
           <p>
-            <%= offer['joboffer.contract_type'] ? "For #{offer['joboffer.contract_type'].value}" : '' %>
-            <%= area && area.first_title ? ", in #{area.first_title}" : '' %>
-            <%= offer['joboffer.asap'] && offer['joboffer.asap'].value == "Yes" ? ", starting ASAP" : (offer['joboffer.start'] ? "starting #{offer['joboffer.start'].value}" : '') %>
+            <%= offer['joboffer.contract_type'] ? "For #{offer['joboffer.contract_type'].value}" : '' %><!--
+            --><%= area && area.first_title ? ", in #{area.first_title}" : '' %><!--
+            --><%= offer['joboffer.asap'] && offer['joboffer.asap'].value == "Yes" ? ", starting ASAP" : (offer['joboffer.start'] ? ", starting #{friendly_date(offer['joboffer.start'])}" : '') %><!--
+            --><%= offer['joboffer.end'] ? ", until #{friendly_date(offer['joboffer.end'])}" : '' %>
           </p>
         </div>
       <% end %>

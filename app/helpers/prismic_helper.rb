@@ -44,4 +44,8 @@ module PrismicHelper
     @api
   end
 
+  def friendly_date(date_fragment)
+    date_fragment.value.to_date.to_time.strftime("%b %-dth %Y")
+  end
+
 end

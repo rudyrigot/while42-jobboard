@@ -21,12 +21,12 @@
 			<%= @offer['joboffer.asap'] && @offer['joboffer.asap'].as_text == 'Yes' ? "<p>ASAP</p>".html_safe : '' %>
 			<% if @offer['joboffer.start'] && @offer['joboffer.end'] %>
 				<ul>
-					<li><strong>Start</strong>: <%= @offer['joboffer.start'].value %></li>
-					<li><strong>End</strong>: <%= @offer['joboffer.end'].value %></li>
+					<li><strong>Start</strong>: <%= friendly_date(@offer['joboffer.start']) %></li>
+					<li><strong>End</strong>: <%= friendly_date(@offer['joboffer.end']) %></li>
 				</ul>
 			<% elsif @offer['joboffer.start'] || @offer['joboffer.end'] %>
-				<%= @offer['joboffer.start'] ? "<p><strong>Start</strong>: #{@offer['joboffer.start'].value}</p>".html_safe : '' %></p>
-				<%= @offer['joboffer.end'] ? "<p><strong>End</strong>: #{@offer['joboffer.end'].value}</p>".html_safe : '' %></p>
+				<%= @offer['joboffer.start'] ? "<p><strong>Start</strong>: #{friendly_date(@offer['joboffer.start'].value)}</p>".html_safe : '' %></p>
+				<%= @offer['joboffer.end'] ? "<p><strong>End</strong>: #{friendly_date(@offer['joboffer.end'])}</p>".html_safe : '' %></p>
 			<% end %>
 
 			<h2>Description</h2>
