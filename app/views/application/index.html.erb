@@ -5,6 +5,31 @@
         <%= link_to "Create a new one", newoffer_path, :class => "btn btn-default btn-sm" %>
       </p>
       <h1>The Job offers</h1>
+
+      <form action="<%= root_path %>" class="form-inline" role="form">
+        <div class="form-group">
+          <select class="form-control input-sm form-control" id="area" name="area">
+            <option value="">Where?</option>
+            <% @areas.each do |area| %>
+              <option value="<%= area.id %>" <%= params[:area] == area.id ? 'selected' : '' %>>
+                <%= area.first_title %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control input-sm form-control" id="contract_type" name="contract_type">
+            <option value="">Contract type?</option>
+            <% @contract_types.each do |contract_type| %>
+              <option value="<%= contract_type %>" <%= params[:contract_type] == contract_type ? 'selected' : '' %>>
+                <%= contract_type %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-default btn-sm">Filter this!</button>
+      </form>
+
       <% @offers.each do |offer| %>
         <% area = offer['joboffer.area'] ? @areas_by_id[offer['joboffer.area'].id][0] : nil %>
         <div class="joboffer">
@@ -19,6 +44,11 @@
           </p>
         </div>
       <% end %>
+
+      <% if @offers.length == 0 %>
+        <p id="noresult">No result with your filters, be less picky! ;)</p>
+      <% end %>
+
     </div>
   </div>
 </article>

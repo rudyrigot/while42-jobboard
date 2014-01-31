@@ -4,8 +4,22 @@ class ApplicationController < ActionController::Base
 
   # Homepage action
   def index
-    @offers = api.form("joboffers").submit(@ref)
-    @areas_by_id = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref).group_by{|doc| doc.id}
+    filters = []
+    params.except(:action, :controller).each do |key, value|
+      if value && value != ''
+        filters << "[:d = at(my.joboffer.#{key}, \"#{value}\")]"
+      end
+    end
+
+    offers_searchform = api.form("joboffers")
+    if filters.length > 0
+      offers_searchform = offers_searchform.query("[#{filters.join}]")
+    end
+    @offers = offers_searchform.submit(@ref).sort{|doc1, doc2| doc1.id < doc2.id ? 1 : -1 }
+
+    @areas = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref)
+    @areas_by_id = @areas.group_by{|doc| doc.id}
+    @contract_types = [ "an internship", "a long-term contract", "a temporary job", "a co-founding" ]
   end
 
   def offer
