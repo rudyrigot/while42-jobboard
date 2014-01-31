@@ -3,3 +3,9 @@ body {
   padding-top: 50px;
   padding-bottom: 20px;
 }
+h1 {
+	padding-top: 30px;
+}
+article#joboffers .joboffer {
+	margin-top: 50px;
+}

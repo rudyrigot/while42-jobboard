@@ -1,2 +1,23 @@
-<article class="container">
+<article class="container" id="joboffers">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <h1>The Job offers</h1>
+      <p>
+        <%= link_to "Create a new one", newoffer_path, :class => "btn btn-default btn-sm" %>
+      </p>
+      <% @offers.each do |offer| %>
+        <% area = offer['joboffer.area'] ? @areas_by_id[offer['joboffer.area'].id][0] : nil %>
+        <div class="joboffer">
+          <h2>
+            <%= link_to offer.first_title, link_resolver(@maybe_ref).link_to(offer) %>
+          </h2>
+          <p>
+            <%= offer['joboffer.contract_type'] ? "For #{offer['joboffer.contract_type'].value}" : '' %>
+            <%= area && area.first_title ? ", in #{area.first_title}" : '' %>
+            <%= offer['joboffer.asap'] && offer['joboffer.asap'].value == "Yes" ? ", starting ASAP" : (offer['joboffer.start'] ? "starting #{offer['joboffer.start'].value}" : '') %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </article>

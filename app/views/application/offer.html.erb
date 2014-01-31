@@ -1,0 +1,53 @@
+<article class="container" id="joboffer">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1><%= @offer.first_title %></h1>
+			<% if @offer['joboffer.website'] %>
+				<p>(<%= link_to "company website", @offer['joboffer.website'].url %>)</p>
+			<% end %>
+			<% if @offer['joboffer.contract_type'] %>
+				<p>For <%= @offer['joboffer.contract_type'].value %></p>
+			<% end %>
+
+			<h2>Where</h2>
+			<ul>
+				<% if @area['area.name'] %>
+					<li><strong>Area</strong>: <%= @area['area.name'].as_text %><%= @area['area.country'] ? ", #{@area['area.country'].as_text}".html_safe : '' %></li>
+				<% end %>
+				<li><strong>Exact location</strong>: <%= @offer['joboffer.place'].as_text %></li>
+			</ul>
+
+			<h2>When</h2>
+			<%= @offer['joboffer.asap'] && @offer['joboffer.asap'].as_text == 'Yes' ? "<p>ASAP</p>".html_safe : '' %>
+			<% if @offer['joboffer.start'] && @offer['joboffer.end'] %>
+				<ul>
+					<li><strong>Start</strong>: <%= @offer['joboffer.start'].value %></li>
+					<li><strong>End</strong>: <%= @offer['joboffer.end'].value %></li>
+				</ul>
+			<% elsif @offer['joboffer.start'] || @offer['joboffer.end'] %>
+				<%= @offer['joboffer.start'] ? "<p><strong>Start</strong>: #{@offer['joboffer.start'].value}</p>".html_safe : '' %></p>
+				<%= @offer['joboffer.end'] ? "<p><strong>End</strong>: #{@offer['joboffer.end'].value}</p>".html_safe : '' %></p>
+			<% end %>
+
+			<h2>Description</h2>
+
+			<%= @offer['joboffer.description'] ? @offer['joboffer.description'].as_html_safe(link_resolver(@maybe_ref)) : '' %>
+
+			<h2>Contact info</h2>
+
+			<% if @offer['joboffer.name'] || @offer['joboffer.email'] || @offer['joboffer.tel'] %>
+				<ul>
+					<% if @offer['joboffer.name'] %>
+						<li><strong>Name</strong>: <%= @offer['joboffer.name'].as_text %></li>
+					<% end %>
+					<% if @offer['joboffer.email'] %>
+						<li><strong>E-mail</strong>: <%= @offer['joboffer.email'].as_text %></li>
+					<% end %>
+					<% if @offer['joboffer.tel'] %>
+						<li><strong>Tel</strong>: <%= @offer['joboffer.tel'].as_text %></li>
+					<% end %>
+				</ul>
+			<% end %>
+		</div>
+	</div>
+</article>

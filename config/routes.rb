@@ -58,6 +58,9 @@ StarterRubyRails::Application.routes.draw do
   # GET     /                                           controllers.Application.index(ref: Option[String])
   root 'application#index'
 
+  get '/offer/:id', to: 'application#offer', as: :offer
+  get '/newoffer', to: 'application#newoffer', as: :newoffer
+
   # # Prismic.io OAuth - you shouldn't touch those lightly, if you need OAuth2 to keep working with prismic.io
   get '/signin', to: 'prismic_oauth#signin', as: :signin
   get '/callback', to: 'prismic_oauth#callback', as: :callback

@@ -7,7 +7,20 @@ module PrismicHelper
   # containing only the information you already have without querying more (see DocumentLink documentation)
   def link_resolver(maybe_ref)
     @link_resolver ||= Prismic::LinkResolver.new(maybe_ref){|doc|
-      document_path(id: doc.id, slug: doc.slug, ref: maybe_ref)
+      return '#' if doc.broken?
+      case doc.link_type
+      when "joboffer"
+        offer_path(id: doc.id, ref: maybe_ref)
+      when "article" # This type is special: the URL is built depending on the document's prismic.io bookmark
+        case doc.id
+        when api.bookmark("newoffer")
+          newoffer_path(ref: maybe_ref)
+        else
+          article_path(id: doc.id, slug: doc.slug, ref: maybe_ref)
+        end
+      else
+        raise "link_resolver doesn't know how to write URLs for #{doc.link_type} type."
+      end
       # maybe_ref is not expected by document path, so it appends a ?ref=maybe_ref to the URL;
       # since maybe_ref is nil when on master ref, it appends nothing.
       # You should do the same for every path method used here in the link_resolver and elsewhere in your app,

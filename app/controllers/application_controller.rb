@@ -4,7 +4,18 @@ class ApplicationController < ActionController::Base
 
   # Homepage action
   def index
-    @documents = api.form("everything").submit(@ref)
+    @offers = api.form("joboffers").submit(@ref)
+    @areas_by_id = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref).group_by{|doc| doc.id}
+  end
+
+  def offer
+    id = params[:id]
+    @offer = PrismicService.get_document(id, api, @ref)
+    @area = PrismicService.get_document(@offer['joboffer.area'].id, api, @ref)
+  end
+
+  def newoffer
+    @article = PrismicService.get_document(api.bookmark("newoffer"), api, @ref)
   end
   
 
