@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
     @areas = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref)
     @areas_by_id = @areas.group_by{|doc| doc.id}
     @contract_types = [ "an internship", "a long-term contract", "a temporary job", "a co-founding" ]
+    @visas = [ "No", "H1-B", "O-1", "E-2" ]
   end
 
   def offer

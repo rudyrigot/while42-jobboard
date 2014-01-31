@@ -8,6 +8,11 @@
 			<% if @offer['joboffer.contract_type'] %>
 				<p>For <%= @offer['joboffer.contract_type'].value %></p>
 			<% end %>
+			<% if @offer['joboffer.visa_sponsor'] && @offer['joboffer.visa_sponsor']!="No" %>
+				<p>Can sponsor <%= @offer['joboffer.visa_sponsor'].value %></p>
+			<% else %>
+				<p>No visa sponsoring</p>
+			<% end %>
 
 			<h2>Where</h2>
 			<ul>
