@@ -58,12 +58,6 @@ StarterRubyRails::Application.routes.draw do
   # GET     /                                           controllers.Application.index(ref: Option[String])
   root 'application#index'
 
-  # # Document detail
-  get '/document/:id/:slug', to: 'application#document', constraints: {id: /[-_a-zA-Z0-9]{16}/}, as: :document
-
-  # # Basic search
-  get '/search', to: 'application#search', as: :search
-
   # # Prismic.io OAuth - you shouldn't touch those lightly, if you need OAuth2 to keep working with prismic.io
   get '/signin', to: 'prismic_oauth#signin', as: :signin
   get '/callback', to: 'prismic_oauth#callback', as: :callback
