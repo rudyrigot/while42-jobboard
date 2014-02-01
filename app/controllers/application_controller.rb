@@ -2,8 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :set_ref, :set_maybe_ref
 
-  # Homepage action
-  def index
+  ## Job offers
+
+  def offers
     filters = []
     params.except(:action, :controller).each do |key, value|
       if value && value != ''
@@ -31,8 +32,40 @@ class ApplicationController < ActionController::Base
 
   def newoffer
     @article = PrismicService.get_document(api.bookmark("newoffer"), api, @ref)
+    render :new
   end
-  
+
+  ## Job searches
+
+  def searches
+    filters = []
+    params.except(:action, :controller).each do |key, value|
+      if value && value != ''
+        filters << "[:d = at(my.jobsearch.#{key}, \"#{value}\")]"
+      end
+    end
+
+    searches_searchform = api.form("jobsearches")
+    if filters.length > 0
+      searches_searchform = searches_searchform.query("[#{filters.join}]")
+    end
+    @searches = searches_searchform.submit(@ref).sort{|doc1, doc2| doc1.id < doc2.id ? 1 : -1 }
+
+    @areas = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref)
+    @areas_by_id = @areas.group_by{|doc| doc.id}
+    @contract_types = [ "an internship", "a long-term contract", "a temporary job", "a co-founding" ]
+  end
+
+  def search
+    id = params[:id]
+    @search = PrismicService.get_document(id, api, @ref)
+    @area = PrismicService.get_document(@search['jobsearch.area'].id, api, @ref)
+  end
+
+  def newsearch
+    @article = PrismicService.get_document(api.bookmark("newsearch"), api, @ref)
+    render :new
+  end
 
   private
 

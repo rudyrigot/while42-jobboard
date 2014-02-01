@@ -1,0 +1,66 @@
+<article class="container" id="jobsearch">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1><%= @search['jobsearch.name'] ? @search['jobsearch.name'].as_text : @search.first_title %></h1>
+			<p><strong><%= @search['jobsearch.job'].as_text %></strong></p>
+			<% if @search['jobsearch.contract_type'] %>
+				<p>Preferably for <%= @search['jobsearch.contract_type'].value %></p>
+			<% end %>
+			<% if @search['jobsearch.description'] %>
+				<h2>About me</h2>
+				<%= @search['jobsearch.description'].as_html_safe(link_resolver(@maybe_ref)) %>
+			<% end %>
+
+			<h2>Where</h2>
+			<ul>
+				<% if @area['area.name'] %>
+					<li><strong>Area</strong>: <%= @area['area.name'].as_text %><%= @area['area.country'] ? ", #{@area['area.country'].as_text}".html_safe : '' %></li>
+				<% end %>
+				<% if @search['jobsearch.place'] %>
+					<li><strong>Exact location</strong>: <%= @offer['joboffer.place'].as_text %></li>
+				<% end %>
+			</ul>
+
+			<h2>When</h2>
+			<%= @search['jobsearch.asap'] && @search['jobsearch.asap'].as_text == 'Yes' ? "<p>ASAP</p>".html_safe : '' %>
+			<% if @search['jobsearch.start'] && @search['jobsearch.end'] %>
+				<ul>
+					<li><strong>Start</strong>: <%= friendly_date(@search['jobsearch.start']) %></li>
+					<li><strong>End</strong>: <%= friendly_date(@search['jobsearch.end']) %></li>
+				</ul>
+			<% elsif @search['jobsearch.start'] || @search['jobsearch.end'] %>
+				<%= @search['jobsearch.start'] ? "<p><strong>Start</strong>: #{friendly_date(@search['jobsearch.start'].value)}</p>".html_safe : '' %></p>
+				<%= @search['jobsearch.end'] ? "<p><strong>End</strong>: #{friendly_date(@search['jobsearch.end'])}</p>".html_safe : '' %></p>
+			<% end %>
+
+			<h2>Immigration stuff</h2>
+			<% if @search['jobsearch.legal'] || @search['jobsearch.sponsor'] %>
+				<ul>
+					<% if @search['jobsearch.legal'] %>
+						<li><%= @search['jobsearch.legal'].value == "Yes" ? "Authorized to work" : "Not authorized to work" %></li>
+					<% end %>
+					<% if @search['jobsearch.sponsor'] %>
+						<li><%= @search['jobsearch.sponsor'].value == "Yes" ? "Seeking sponsorship" : "Not seeking sponsorship" %></li>
+					<% end %>
+				</ul>
+			<% end %>
+
+			<%= @search['jobsearch.description'] ? @search['jobsearch.description'].as_html_safe(link_resolver(@maybe_ref)) : '' %>
+
+			<h2>Contact info</h2>
+			<% if @search['jobsearch.linkedin'] || @search['jobsearch.email'] || @search['jobsearch.tel'] %>
+				<ul>
+					<% if @search['jobsearch.email'] %>
+						<li><strong>E-mail</strong>: <%= link_to @search['jobsearch.email'].as_text, "mailto:#{@search['jobsearch.email'].as_text}" %></li>
+					<% end %>
+					<% if @search['jobsearch.tel'] %>
+						<li><strong>Tel</strong>: <%= link_to @search['jobsearch.tel'].as_text, "tel:#{@search['jobsearch.tel'].as_text}" %></li>
+					<% end %>
+					<% if @search['jobsearch.linkedin'] %>
+						<li><strong>Professional profile</strong>: <%= link_to @search['jobsearch.linkedin'].url %></li>
+					<% end %>
+				</ul>
+			<% end %>
+		</div>
+	</div>
+</article>

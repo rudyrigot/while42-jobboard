@@ -4,7 +4,7 @@
       <p class="newbutton">
         <%= link_to "Create a new one", newoffer_path, :class => "btn btn-default btn-sm" %>
       </p>
-      <h1>The Job offers</h1>
+      <h1>The job offers</h1>
 
       <form action="<%= root_path %>" class="form-inline" role="form">
         <%= render partial: "filterselect", locals: { defaultOption: "Where?", options: @areas.map{|area| [area.id, area.first_title]}, paramName: "area" } %>

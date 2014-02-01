@@ -11,6 +11,8 @@ module PrismicHelper
       case doc.link_type
       when "joboffer"
         offer_path(id: doc.id, ref: maybe_ref)
+      when "jobsearch"
+        search_path(id: doc.id, ref: maybe_ref)
       when "area"
         root_path(area: doc.id, ref: maybe_ref)
       when "article" # This type is special: the URL is built depending on the document's prismic.io bookmark

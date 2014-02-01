@@ -19,7 +19,9 @@
 				<% if @area['area.name'] %>
 					<li><strong>Area</strong>: <%= @area['area.name'].as_text %><%= @area['area.country'] ? ", #{@area['area.country'].as_text}".html_safe : '' %></li>
 				<% end %>
-				<li><strong>Exact location</strong>: <%= @offer['joboffer.place'].as_text %></li>
+				<% if @offer['joboffer.place'] %>
+					<li><strong>Exact location</strong>: <%= @offer['joboffer.place'].as_text %></li>
+				<% end %>
 			</ul>
 
 			<h2>When</h2>

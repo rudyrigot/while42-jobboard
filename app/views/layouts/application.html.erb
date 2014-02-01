@@ -24,17 +24,17 @@
         <div class="navbar-collapse collapse" id="top-navbar">
           <ul class="nav navbar-nav">
             <li>
-              <%= link_to "Job offers", root_path %>
+              <%= link_to "Job offers", root_path(ref: @maybe_ref) %>
             </li>
             <li>
-              <a href="#" onclick="javascript:alert('Coming soon!'); return false;">Job requests</a>
+              <%= link_to "Job searches", searches_path(ref: @maybe_ref) %>
             </li>
           </ul>
-          <!-- <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="#">Menu entry</a>
+              <a href="https://github.com/rudyrigot/while42-jobboard/issues" target="_blank">Report bug / request feature</a>
             </li>
-          </ul> -->
+          </ul>
         </div>
       </div>
     </header>

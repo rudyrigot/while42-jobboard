@@ -1,0 +1,42 @@
+<article class="container" id="joboffers">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <p class="newbutton">
+        <%= link_to "Create a new one", newsearch_path, :class => "btn btn-default btn-sm" %>
+      </p>
+      <h1>The job searches</h1>
+
+      <form action="<%= searches_path %>" class="form-inline" role="form">
+        <%= render partial: "filterselect", locals: { defaultOption: "Where?", options: @areas.map{|area| [area.id, area.first_title]}, paramName: "area" } %>
+        <%= render partial: "filterselect", locals: { defaultOption: "Contract type?", options: @contract_types, paramName: "contract_type" } %>
+        <%= render partial: "filterselect", locals: { defaultOption: "Can legally work?", options: ['Yes', 'No'], paramName: "legal" } %>
+        <button type="submit" class="btn btn-default btn-sm">Filter this!</button>
+      </form>
+
+      <% @searches.each do |search| %>
+        <% area = search['jobsearch.area'] ? @areas_by_id[search['jobsearch.area'].id][0] : nil %>
+        <div class="jobsearch">
+          <h3>
+            <%= link_to search['jobsearch.name'] ? search['jobsearch.name'].as_text : search.first_title, link_resolver(@maybe_ref).link_to(search) %>
+          </h3>
+          <%= search['jobsearch.job'] ? "<h4>#{search['jobsearch.job'].as_text}</h4>".html_safe : '' %>
+          <p>
+            <%= search['jobsearch.contract_type'] ? "For #{search['jobsearch.contract_type'].value}" : '' %><!--
+            --><%= area && area.first_title ? ", in #{area.first_title}" : '' %><!--
+            --><%= search['jobsearch.asap'] && search['jobsearch.asap'].value == "Yes" ? ", starting ASAP" : (search['jobsearch.start'] ? ", starting #{friendly_date(search['jobsearch.start'])}" : '') %><!--
+            --><%= search['jobsearch.end'] ? ", until #{friendly_date(search['jobsearch.end'])}" : '' %>
+          </p>
+          <p>
+            <%= search['jobsearch.legal'] && search['jobsearch.legal'].value == "Yes" ? "Authorized to work" : "Not authorized to work" %>,
+            <%= search['jobsearch.sponsor'] && search['jobsearch.sponsor'].value == "Yes" ? "seeking sponsorship" : "not seeking sponsorship" %>.
+          </p>
+        </div>
+      <% end %>
+
+      <% if @searches.length == 0 %>
+        <p id="noresult">There's no one in here matching your filters.</p>
+      <% end %>
+
+    </div>
+  </div>
+</article>
