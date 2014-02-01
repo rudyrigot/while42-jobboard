@@ -7,36 +7,9 @@
       <h1>The Job offers</h1>
 
       <form action="<%= root_path %>" class="form-inline" role="form">
-        <div class="form-group">
-          <select class="form-control input-sm form-control" id="area" name="area">
-            <option value="">Where?</option>
-            <% @areas.each do |area| %>
-              <option value="<%= area.id %>" <%= params[:area] == area.id ? 'selected' : '' %>>
-                <%= area.first_title %>
-              </option>
-            <% end %>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control input-sm form-control" id="contract_type" name="contract_type">
-            <option value="">Contract type?</option>
-            <% @contract_types.each do |contract_type| %>
-              <option value="<%= contract_type %>" <%= params[:contract_type] == contract_type ? 'selected' : '' %>>
-                <%= contract_type %>
-              </option>
-            <% end %>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control input-sm form-control" id="visa_sponsor" name="visa_sponsor">
-            <option value="">Sponsoring?</option>
-            <% @visas.each do |visa_sponsor| %>
-              <option value="<%= visa_sponsor %>" <%= params[:visa_sponsor] == visa_sponsor ? 'selected' : '' %>>
-                <%= visa_sponsor %>
-              </option>
-            <% end %>
-          </select>
-        </div>
+        <%= render partial: "filterselect", locals: { defaultOption: "Where?", options: @areas.map{|area| [area.id, area.first_title]}, paramName: "area" } %>
+        <%= render partial: "filterselect", locals: { defaultOption: "Contract type?", options: @contract_types, paramName: "contract_type" } %>
+        <%= render partial: "filterselect", locals: { defaultOption: "Sponsoring?", options: @visas, paramName: "visa_sponsor" } %>
         <button type="submit" class="btn btn-default btn-sm">Filter this!</button>
       </form>
 

@@ -1,0 +1,20 @@
+<%#
+  In:
+    defaultOption - the string to put in the first and empty option
+    paramName - as the fragment name expected by prismic.io
+    options - an array:
+      * if you need value=label, you can go ["value1", "value2", "value3", etc.]
+      * if you need value!=label, you can go [["value1", "label1"], ["value2", "label2"], etc.]
+%>
+<div class="form-group">
+  <select class="form-control input-sm form-control" id="<%= paramName %>" name="<%= paramName %>">
+    <option value=""><%= defaultOption %></option>
+    <% options.each do |option| %>
+      <% value = option.kind_of?(Array) ? option[0] : option %>
+      <% label = option.kind_of?(Array) ? option[1] : option %>
+      <option value="<%= value %>" <%= params[paramName.to_sym] == value ? 'selected' : '' %>>
+        <%= label %>
+      </option>
+    <% end %>
+  </select>
+</div>
