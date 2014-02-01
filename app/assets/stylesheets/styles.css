@@ -9,6 +9,9 @@ h1 {
 article#joboffers .joboffer {
 	margin-top: 50px;
 }
+article#new h2 {
+	margin-top: 50px;
+}
 .newbutton {
 	float:right;
 }
@@ -19,4 +22,7 @@ article#joboffers .joboffer {
 	font-weight: bold;
 	background-color: #f0f0f0;
 	border-radius: 20px;
+}
+img {
+	max-width: 100%;
 }

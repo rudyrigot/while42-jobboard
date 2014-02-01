@@ -30,11 +30,6 @@ class ApplicationController < ActionController::Base
     @area = PrismicService.get_document(@offer['joboffer.area'].id, api, @ref)
   end
 
-  def newoffer
-    @article = PrismicService.get_document(api.bookmark("newoffer"), api, @ref)
-    render :new
-  end
-
   ## Job searches
 
   def searches
@@ -62,8 +57,10 @@ class ApplicationController < ActionController::Base
     @area = PrismicService.get_document(@search['jobsearch.area'].id, api, @ref)
   end
 
-  def newsearch
-    @article = PrismicService.get_document(api.bookmark("newsearch"), api, @ref)
+  ## Help pages
+
+  def newad
+    @article = PrismicService.get_document(api.bookmark("new"), api, @ref)
     render :new
   end
 

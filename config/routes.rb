@@ -60,13 +60,13 @@ StarterRubyRails::Application.routes.draw do
   # Job offers
   root 'application#offers'
   get '/offer/:id', to: 'application#offer', as: :offer
-  get '/newoffer', to: 'application#newoffer', as: :newoffer
 
   # Job searches
   get '/searches', to: 'application#searches', as: :searches
   get '/search/:id', to: 'application#search', as: :search
-  get '/newsearch', to: 'application#newsearch', as: :newsearch
 
+  # Help pages
+  get '/newad', to: 'application#newad', as: :newad
   get '/helpforadmins', to: 'application#helpforadmins', as: :helpforadmins
 
   # # Prismic.io OAuth - you shouldn't touch those lightly, if you need OAuth2 to keep working with prismic.io

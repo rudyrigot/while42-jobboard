@@ -16,6 +16,14 @@ module Prismic
 			end
 		end
 
+		class Image
+			class View
+				def as_html(link_resolver=nil)
+				  %(<img src="#@url" />)
+				end
+			end
+		end
+
 		# You can override any of the kit's features at will, in its HTML serialization for instance.
 		# (The kit provides a basic one, but you get to make the one that best fits your design)
 		# For instance, below is a commented-out overriding of the HTML serialization for images within StructuredText fragments.
