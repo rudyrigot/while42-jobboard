@@ -67,6 +67,12 @@ class ApplicationController < ActionController::Base
     render :new
   end
 
+
+  def helpforadmins
+    @article = PrismicService.get_document(api.bookmark("helpforadmins"), api, @ref)
+    render :new
+  end
+
   private
 
 

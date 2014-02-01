@@ -67,6 +67,8 @@ StarterRubyRails::Application.routes.draw do
   get '/search/:id', to: 'application#search', as: :search
   get '/newsearch', to: 'application#newsearch', as: :newsearch
 
+  get '/helpforadmins', to: 'application#helpforadmins', as: :helpforadmins
+
   # # Prismic.io OAuth - you shouldn't touch those lightly, if you need OAuth2 to keep working with prismic.io
   get '/signin', to: 'prismic_oauth#signin', as: :signin
   get '/callback', to: 'prismic_oauth#callback', as: :callback

@@ -76,6 +76,8 @@
           <% else %>
             <%= link_to signin_path do %>Sign in to preview future releases<% end %>
           <% end %>
+          -
+          <%= link_to "Help for admins", helpforadmins_path(:ref => @maybe_ref) %>
         </p>
       </footer>
 
