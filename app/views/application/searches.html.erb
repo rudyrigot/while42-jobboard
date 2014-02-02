@@ -10,10 +10,13 @@
         <%= render partial: "filterselect", locals: { defaultOption: "Where?", options: @areas.map{|area| [area.id, area.first_title]}, paramName: "area" } %>
         <%= render partial: "filterselect", locals: { defaultOption: "Contract type?", options: @contract_types, paramName: "contract_type" } %>
         <%= render partial: "filterselect", locals: { defaultOption: "Can legally work?", options: ['Yes', 'No'], paramName: "legal" } %>
+        <div class="form-group">
+          <%= text_field_tag :fulltext, params[:fulltext], :class => "form-control", :placeholder => "keywords" %>
+        </div>
         <button type="submit" class="btn btn-default btn-sm">Filter this!</button>
       </form>
 
-      <% @searches.each do |search| %>
+      <% @results.each do |search| %>
         <% area = search['jobsearch.area'] ? @areas_by_id[search['jobsearch.area'].id][0] : nil %>
         <div class="jobsearch">
           <h3>
@@ -33,7 +36,7 @@
         </div>
       <% end %>
 
-      <% if @searches.length == 0 %>
+      <% if @results.length == 0 %>
         <p id="noresult">There's no one in here matching your filters.</p>
       <% end %>
 

@@ -1,23 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :set_ref, :set_maybe_ref
+  before_action :perform_filtered_query, only: [:offers, :searches]
 
   ## Job offers
 
   def offers
-    filters = []
-    params.except(:action, :controller).each do |key, value|
-      if value && value != ''
-        filters << "[:d = at(my.joboffer.#{key}, \"#{value}\")]"
-      end
-    end
-
-    offers_searchform = api.form("joboffers")
-    if filters.length > 0
-      offers_searchform = offers_searchform.query("[#{filters.join}]")
-    end
-    @offers = offers_searchform.submit(@ref).sort{|doc1, doc2| doc1.id < doc2.id ? 1 : -1 }
-
     @areas = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref)
     @areas_by_id = @areas.group_by{|doc| doc.id}
     @contract_types = [ "an internship", "a long-term contract", "a temporary job", "a co-founding" ]
@@ -33,19 +21,6 @@ class ApplicationController < ActionController::Base
   ## Job searches
 
   def searches
-    filters = []
-    params.except(:action, :controller).each do |key, value|
-      if value && value != ''
-        filters << "[:d = at(my.jobsearch.#{key}, \"#{value}\")]"
-      end
-    end
-
-    searches_searchform = api.form("jobsearches")
-    if filters.length > 0
-      searches_searchform = searches_searchform.query("[#{filters.join}]")
-    end
-    @searches = searches_searchform.submit(@ref).sort{|doc1, doc2| doc1.id < doc2.id ? 1 : -1 }
-
     @areas = api.form("everything").query('[[:d = at(document.type, "area")]]').submit(@ref)
     @areas_by_id = @areas.group_by{|doc| doc.id}
     @contract_types = [ "an internship", "a long-term contract", "a temporary job", "a co-founding" ]
@@ -72,8 +47,29 @@ class ApplicationController < ActionController::Base
 
   private
 
-
   ## before_action methods
+
+  def perform_filtered_query
+    document_type = ( action_name == 'searches' ? 'jobsearch' : 'joboffer')
+    filters = []
+    params.except(:action, :controller).each do |key, value|
+      if value && value != ''
+        if key == 'fulltext'
+          value.split(" ").map do |keyword|
+            filters << %([:d = fulltext(document, "#{keyword}")])
+          end
+        else
+          filters << "[:d = at(my.#{document_type}.#{key}, \"#{value}\")]"
+        end
+      end
+    end
+
+    searchform = api.form("job#{action_name}")
+    if filters.length > 0
+      searchform = searchform.query("[#{filters.join}]")
+    end
+    @results = searchform.submit(@ref).sort{|doc1, doc2| doc1.id < doc2.id ? 1 : -1 }
+  end
 
   # Setting @ref as the actual ref id being queried, even if it's the master ref.
   # To be used to call the API, for instance: api.form('everything').submit(@ref)
