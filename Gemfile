@@ -30,6 +30,8 @@ gem 'yajl-ruby', require: 'yajl'
 
 gem 'prismic.io', '~> 1.0.0.rc1', require: 'prismic'
 
+gem 'twitter'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

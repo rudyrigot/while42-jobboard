@@ -41,5 +41,27 @@ module PrismicService
       end
     end
 
+
+    @@expected_ref = nil
+    @@expected_ID_list = nil
+
+    # Allows to pass a block of things to do when new documents have just been published.
+    # You may pass predicates to query on, so that the block is executed only when a subset of documents sees a newcomer.
+    def on_new_document(api, predicates= '')
+      ref = api.master.ref # Current master ref
+      if !@@expected_ref # First ever time we check: initializing
+        @@expected_ref = ref
+        @@expected_ID_list = api.form('everything').query(predicates).set('pageSize', '100000000').submit(ref).map { |document| document.id }
+      elsif @@expected_ref != ref # The ref has changed
+        # all documents whose IDs are not listed as existing
+        new_documents = api.form('everything').query(predicates).set('pageSize', '100000000').submit(ref).select {|document| !@@expected_ID_list.include?(document.id) }
+        # yielding this list of new documents
+        yield(new_documents)
+        # updating what's expected for next time
+        @@expected_ID_list = new_documents.map{|doc| doc.id}
+        @@expected_ref = ref
+      end
+    end
+
   end
 end

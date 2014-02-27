@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action :set_ref, :set_maybe_ref
+  before_action :set_ref, :set_maybe_ref, :update_twitter_if_new_ad
   before_action :perform_filtered_query, only: [:offers, :searches]
 
   ## Job offers
@@ -84,6 +84,20 @@ class ApplicationController < ActionController::Base
   #  * you can pass it to your link_resolver method, which will use it accordingly.
   def set_maybe_ref
     @maybe_ref = (params[:ref] != '' ? params[:ref] : nil)
+  end
+
+  # If new job ad, update Twitter
+  def update_twitter_if_new_ad
+    PrismicService.on_new_document(api, '[[:d = any(document.type, ["joboffer", "jobsearch"])]]') do |new_documents|
+      new_documents.each do |document|
+        tweet = []
+        tweet << "[New job search]" if document.type == 'jobsearch'
+        tweet << "[New job offer]" if document.type == 'joboffer'
+        tweet << document.first_title.truncate(100, separator: ' ')
+        tweet << "http://#{request.host}/#{document.type == 'jobsearch' ? 'search' : 'offer'}/#{document.id}"
+        TwitterService.update(tweet.join(' '))
+      end
+    end
   end
 
   ##
